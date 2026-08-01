@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heart Disease Prediction API</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #222; }
+  h1 { color: #b02a37; }
+  code, pre { background: #f4f4f4; padding: 8px; border-radius: 6px; display: block; overflow-x: auto; }
+  .field { margin-bottom: 10px; }
+  label { display: inline-block; width: 110px; }
+  input { padding: 4px; width: 120px; }
+  button { padding: 8px 16px; background: #b02a37; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  #result { margin-top: 16px; font-weight: bold; }
+</style>
+</head>
+<body>
+  <h1>❤️ Heart Disease Prediction API</h1>
+  <p>This service predicts whether a patient is at risk of heart disease based on clinical parameters.</p>
+
+  <h3>Try it</h3>
+  <form id="predictForm">
+    <div class="field"><label>age</label><input type="number" id="age" value="63" required></div>
+    <div class="field"><label>sex</label><input type="number" id="sex" value="1" required></div>
+    <div class="field"><label>cp</label><input type="number" id="cp" value="3" required></div>
+    <div class="field"><label>trestbps</label><input type="number" id="trestbps" value="145" required></div>
+    <div class="field"><label>chol</label><input type="number" id="chol" value="233" required></div>
+    <div class="field"><label>fbs</label><input type="number" id="fbs" value="1" required></div>
+    <div class="field"><label>restecg</label><input type="number" id="restecg" value="0" required></div>
+    <div class="field"><label>thalach</label><input type="number" id="thalach" value="150" required></div>
+    <div class="field"><label>exang</label><input type="number" id="exang" value="0" required></div>
+    <div class="field"><label>oldpeak</label><input type="number" step="0.1" id="oldpeak" value="2.3" required></div>
+    <div class="field"><label>slope</label><input type="number" id="slope" value="0" required></div>
+    <div class="field"><label>ca</label><input type="number" id="ca" value="0" required></div>
+    <div class="field"><label>thal</label><input type="number" id="thal" value="1" required></div>
+    <button type="submit">Predict</button>
+  </form>
+  <div id="result"></div>
+
+  <h3>API Usage</h3>
+  <p>POST JSON to <code>/predict</code>:</p>
+  <pre>{
+  "age": 63, "sex": 1, "cp": 3, "trestbps": 145, "chol": 233,
+  "fbs": 1, "restecg": 0, "thalach": 150, "exang": 0,
+  "oldpeak": 2.3, "slope": 0, "ca": 0, "thal": 1
+}</pre>
+
+<script>
+document.getElementById('predictForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fields = ['age','sex','cp','trestbps','chol','fbs','restecg','thalach','exang','oldpeak','slope','ca','thal'];
+  const payload = {};
+  fields.forEach(f => payload[f] = parseFloat(document.getElementById(f).value));
+
+  const resDiv = document.getElementById('result');
+  resDiv.textContent = "Predicting...";
+
+  try {
+    const res = await fetch('/predict', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    resDiv.textContent = data.prediction
+      ? `Prediction: ${data.prediction} (confidence: ${data.confidence})`
+      : `Error: ${data.error}`;
+  } catch (err) {
+    resDiv.textContent = "Error: " + err.message;
+  }
+});
+</script>
+</body>
+</html>
