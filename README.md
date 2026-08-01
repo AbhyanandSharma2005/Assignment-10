@@ -4,7 +4,7 @@ A machine learning system that predicts whether a patient is at risk of heart
 disease based on clinical parameters, exposed as a REST API built with
 Flask, version-controlled on GitHub, and deployed live on Render.
 
-**Live App URL:** `https://<your-app-name>.onrender.com`  ← replace after deploying (see Task 4 below)
+**Live App URL:** `https://heart-disease-predictor-u681.onrender.com`  ← replace after deploying (see Task 4 below)
 
 ---
 
